@@ -1,0 +1,1222 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Réveillon 2027</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎆</text></svg>">
+<meta name="theme-color" content="#0b1026">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0b1026;
+    --bg-2: #141a3a;
+    --card: rgba(255, 255, 255, 0.06);
+    --card-strong: rgba(255, 255, 255, 0.1);
+    --line: rgba(255, 255, 255, 0.12);
+    --text: #f5f3ea;
+    --muted: #a9adc6;
+    --gold: #f4c95d;
+    --gold-2: #e0a526;
+    --ok: #4ade80;
+    --warn: #fb923c;
+    --pink: #f472b6;
+    --radius: 18px;
+    --font-title: "Fraunces", Georgia, serif;
+    --font: "Inter", system-ui, sans-serif;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; }
+  body {
+    background:
+      radial-gradient(1200px 600px at 80% -10%, #2a2468 0%, transparent 60%),
+      radial-gradient(900px 500px at -10% 10%, #13305e 0%, transparent 55%),
+      var(--bg);
+    background-attachment: fixed;
+    color: var(--text);
+    font-family: var(--font);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+  #fx { position: fixed; inset: 0; pointer-events: none; z-index: 50; }
+  .stars { position: fixed; inset: 0; pointer-events: none; z-index: 0;
+    background-image:
+      radial-gradient(1px 1px at 10% 20%, #fff8 50%, transparent 51%),
+      radial-gradient(1px 1px at 30% 70%, #fff6 50%, transparent 51%),
+      radial-gradient(1.5px 1.5px at 55% 15%, #fff9 50%, transparent 51%),
+      radial-gradient(1px 1px at 75% 45%, #fff5 50%, transparent 51%),
+      radial-gradient(1px 1px at 90% 80%, #fff7 50%, transparent 51%),
+      radial-gradient(1.5px 1.5px at 20% 90%, #fff5 50%, transparent 51%),
+      radial-gradient(1px 1px at 65% 85%, #fff6 50%, transparent 51%),
+      radial-gradient(1px 1px at 45% 40%, #fff4 50%, transparent 51%);
+  }
+  .wrap { position: relative; z-index: 1; max-width: 1100px; margin: 0 auto; padding: 20px 16px 80px; }
+
+  /* Header + tabs */
+  header { display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; margin-bottom: 24px; }
+  .brand { display: flex; align-items: center; gap: 12px; }
+  .brand .logo { font-size: 34px; filter: drop-shadow(0 0 12px #f4c95d88); }
+  .brand h1 { font-family: var(--font-title); font-size: 26px; margin: 0; letter-spacing: .3px; }
+  .brand h1 span { color: var(--gold); }
+  .brand small { display: block; color: var(--muted); font-size: 13px; }
+  nav.tabs { display: flex; gap: 6px; background: var(--card); border: 1px solid var(--line); padding: 5px; border-radius: 999px; }
+  nav.tabs button {
+    border: 0; background: transparent; color: var(--muted); font: 600 14px var(--font);
+    padding: 9px 16px; border-radius: 999px; cursor: pointer; transition: .2s;
+  }
+  nav.tabs button.active { background: linear-gradient(135deg, var(--gold), var(--gold-2)); color: #241a00; box-shadow: 0 4px 18px #f4c95d44; }
+  nav.tabs button:not(.active):hover { color: var(--text); }
+
+  section.view { display: none; animation: fade .35s ease; }
+  section.view.active { display: block; }
+  @keyframes fade { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+
+  h2 { font-family: var(--font-title); font-size: 24px; margin: 28px 0 14px; }
+  .muted { color: var(--muted); }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); backdrop-filter: blur(8px); }
+
+  /* Hero */
+  .hero { padding: 28px 24px; text-align: center; position: relative; overflow: hidden; }
+  .hero .kicker { color: var(--gold); font-weight: 600; letter-spacing: 2px; text-transform: uppercase; font-size: 12px; }
+  .hero h2 { font-size: clamp(28px, 6vw, 46px); margin: 8px 0 18px; }
+  .countdown { display: flex; justify-content: center; gap: 12px; flex-wrap: wrap; }
+  .countdown div { background: var(--card-strong); border: 1px solid var(--line); border-radius: 14px; padding: 12px 10px; min-width: 78px; }
+  .countdown b { display: block; font-family: var(--font-title); font-size: 34px; color: var(--gold); font-variant-numeric: tabular-nums; }
+  .countdown span { font-size: 12px; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; }
+
+  /* Stats */
+  .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; margin-top: 16px; }
+  .stat { padding: 16px 18px; }
+  .stat .label { color: var(--muted); font-size: 13px; }
+  .stat .value { font-family: var(--font-title); font-size: 26px; margin-top: 4px; }
+  .stat .sub { font-size: 12px; color: var(--muted); margin-top: 2px; }
+
+  /* Progress */
+  .mission { padding: 20px; margin-top: 16px; }
+  .mission-head { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; flex-wrap: wrap; }
+  .mission-head b { font-family: var(--font-title); font-size: 20px; }
+  .bar { height: 16px; background: #ffffff14; border-radius: 999px; overflow: hidden; margin-top: 12px; border: 1px solid var(--line); }
+  .bar > i { display: block; height: 100%; width: 0; border-radius: 999px;
+    background: linear-gradient(90deg, var(--pink), var(--gold)); transition: width .8s cubic-bezier(.2,.9,.3,1.2);
+    box-shadow: 0 0 14px #f4c95d88; }
+  .bar.small { height: 8px; margin-top: 6px; }
+
+  /* Achievements */
+  .achievements { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 10px; }
+  .ach { padding: 14px; text-align: center; transition: .3s; }
+  .ach .ico { font-size: 30px; }
+  .ach b { display: block; font-size: 14px; margin-top: 6px; }
+  .ach small { color: var(--muted); font-size: 12px; }
+  .ach.locked { opacity: .4; filter: grayscale(1); }
+  .ach.unlocked { border-color: #f4c95d77; box-shadow: 0 0 22px #f4c95d22 inset; }
+
+  /* Menu */
+  .day { margin-bottom: 26px; }
+  .day-head { display: flex; align-items: center; gap: 12px; margin: 0 0 12px; }
+  .day-head .date { background: linear-gradient(135deg, var(--gold), var(--gold-2)); color: #241a00; font-weight: 800; border-radius: 12px; padding: 8px 12px; text-align: center; line-height: 1.1; }
+  .day-head .date small { display: block; font-size: 11px; font-weight: 600; text-transform: uppercase; }
+  .day-head h3 { margin: 0; font-family: var(--font-title); font-size: 20px; }
+  .meal-list { overflow: hidden; }
+  .meal-row { display: flex; align-items: center; gap: 14px; width: 100%; padding: 12px 16px; background: transparent; border: 0; border-bottom: 1px solid var(--line); color: var(--text); font: inherit; text-align: left; cursor: pointer; transition: background .15s; }
+  .meal-row:last-child { border-bottom: 0; }
+  .meal-row:hover, .meal-row:focus-visible { background: #ffffff0d; outline: none; }
+  .thumb { width: 56px; height: 56px; border-radius: 14px; flex: none; display: grid; place-items: center; font-size: 28px; overflow: hidden; }
+  .thumb img { width: 100%; height: 100%; object-fit: cover; }
+  .meal-row .info { flex: 1; min-width: 0; }
+  .meal-row .info b { font-size: 16px; display: block; }
+  .meal-row .info small { display: block; color: var(--muted); font-size: 13px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .when { display: inline-block; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .6px; color: var(--muted); margin-bottom: 2px; }
+  .meal-row .chev { color: var(--muted); font-size: 20px; flex: none; }
+  .price-tag { font-family: var(--font-title); font-size: 18px; color: var(--gold); white-space: nowrap; flex: none; }
+  .price-tag.free { color: var(--ok); }
+  .price-tag.out { color: var(--muted); font: 600 13px var(--font); }
+  .meal-row input { width: 100px; }
+
+  /* Modal */
+  .modal-bg { position: fixed; inset: 0; background: #05081acc; backdrop-filter: blur(6px); z-index: 40; display: none; align-items: center; justify-content: center; padding: 16px; }
+  .modal-bg.open { display: flex; animation: fade .2s ease; }
+  .modal { width: 100%; max-width: 520px; max-height: calc(100vh - 32px); overflow-y: auto; background: var(--bg-2); border: 1px solid var(--line); border-radius: 22px; box-shadow: 0 30px 80px #000a; animation: pop .25s cubic-bezier(.2,.9,.3,1.2); }
+  @keyframes pop { from { transform: scale(.94); opacity: 0; } to { transform: none; opacity: 1; } }
+  .modal .photo { position: relative; height: 230px; display: grid; place-items: center; font-size: 96px; overflow: hidden; border-radius: 22px 22px 0 0; }
+  .modal .photo img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+  .modal .photo .tag { position: absolute; top: 14px; left: 14px; background: #0b1026cc; border: 1px solid var(--line); padding: 5px 12px; border-radius: 999px; font-size: 13px; font-weight: 600; }
+  .modal .close { position: absolute; top: 12px; right: 12px; width: 38px; height: 38px; border-radius: 50%; border: 1px solid var(--line); background: #0b1026cc; color: var(--text); font-size: 18px; cursor: pointer; }
+  .modal .photo-actions { position: absolute; bottom: 12px; right: 12px; display: flex; gap: 6px; }
+  .modal .photo-actions > * { background: #0b1026cc; border: 1px solid var(--line); color: var(--text); padding: 6px 12px; border-radius: 999px; font: 600 12px var(--font); cursor: pointer; }
+  .modal .content { padding: 20px 22px 22px; }
+  .modal h3 { font-family: var(--font-title); font-size: 28px; margin: 0 0 8px; }
+  .modal p.desc { color: var(--muted); line-height: 1.55; margin: 0 0 18px; }
+  .modal h5 { margin: 0 0 10px; font-size: 13px; text-transform: uppercase; letter-spacing: 1px; color: var(--gold); }
+  .chips { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 20px; }
+  .chip { background: #ffffff10; border: 1px solid var(--line); padding: 6px 12px; border-radius: 999px; font-size: 14px; }
+  .modal-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .modal-stats div { background: #ffffff08; border: 1px solid var(--line); border-radius: 14px; padding: 12px 14px; }
+  .modal-stats small { display: block; color: var(--muted); font-size: 12px; }
+  .modal-stats b { font-family: var(--font-title); font-size: 22px; color: var(--gold); }
+  .modal-nav { display: flex; justify-content: space-between; gap: 10px; margin-top: 18px; }
+
+  .summary { padding: 18px 20px; margin-top: 10px; }
+  .summary table { width: 100%; border-collapse: collapse; }
+  .summary td { padding: 8px 0; border-bottom: 1px dashed var(--line); }
+  .summary td:last-child { text-align: right; font-variant-numeric: tabular-nums; font-weight: 600; }
+  .summary tr.total td { border-bottom: 0; font-family: var(--font-title); font-size: 22px; color: var(--gold); padding-top: 12px; }
+
+  /* Forms & buttons */
+  input, select {
+    background: #ffffff10; border: 1px solid var(--line); color: var(--text); border-radius: 12px;
+    padding: 10px 12px; font: 500 15px var(--font); outline: none; min-width: 0;
+  }
+  input:focus, select:focus { border-color: var(--gold); box-shadow: 0 0 0 3px #f4c95d33; }
+  select option { background: var(--bg-2); }
+  .btn { border: 1px solid var(--line); background: var(--card-strong); color: var(--text); padding: 10px 16px; border-radius: 12px; font: 600 14px var(--font); cursor: pointer; transition: .15s; white-space: nowrap; }
+  .btn:hover { background: #ffffff1f; }
+  .btn.gold { background: linear-gradient(135deg, var(--gold), var(--gold-2)); color: #241a00; border: 0; }
+  .btn.gold:hover { filter: brightness(1.08); }
+  .btn.sm { padding: 6px 10px; font-size: 12px; border-radius: 10px; }
+  .btn.danger { color: #fca5a5; }
+  .toolbar { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; justify-content: space-between; }
+
+  /* People */
+  .add-person { padding: 16px; display: grid; grid-template-columns: 1fr auto auto; gap: 10px; }
+  .chacara-box { padding: 16px; display: flex; gap: 12px; align-items: center; flex-wrap: wrap; margin-top: 12px; }
+  .chacara-box .grow { flex: 1; min-width: 200px; }
+  .people { display: grid; grid-template-columns: repeat(auto-fill, minmax(290px, 1fr)); gap: 14px; margin-top: 16px; }
+  .person { padding: 16px; position: relative; transition: .3s; }
+  .person.legend { border-color: #f4c95d99; box-shadow: 0 0 0 1px #f4c95d44, 0 10px 34px #f4c95d1a; }
+  .person .top { display: flex; gap: 12px; align-items: center; }
+  .avatar { width: 58px; height: 58px; border-radius: 50%; flex: none; display: grid; place-items: center; font-weight: 800; font-size: 22px; color: #0b1026; position: relative; cursor: pointer; overflow: hidden; border: 2px solid #ffffff33; }
+  .avatar img { width: 100%; height: 100%; object-fit: cover; }
+  .avatar input { display: none; }
+  .avatar::after { content: "📷"; position: absolute; inset: 0; display: grid; place-items: center; background: #0008; font-size: 18px; opacity: 0; transition: .2s; }
+  .avatar:hover::after { opacity: 1; }
+  .person .name { font-weight: 700; font-size: 17px; }
+  .rank { position: absolute; top: 14px; right: 14px; font-size: 22px; }
+  .status-pill { display: inline-block; margin-top: 3px; font-size: 12px; padding: 3px 9px; border-radius: 999px; background: #ffffff12; color: var(--muted); }
+  .status-pill.legend { background: #f4c95d26; color: var(--gold); }
+  .status-pill.half { background: #fb923c22; color: var(--warn); }
+  .lines { margin-top: 14px; display: grid; gap: 8px; }
+  .line { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 10px 12px; border-radius: 12px; background: #ffffff08; border: 1px solid var(--line); }
+  .line .what { font-size: 13px; color: var(--muted); }
+  .line .amt { font-weight: 700; font-variant-numeric: tabular-nums; }
+  .line .amt.open { color: var(--muted); font-weight: 600; font-style: italic; }
+  .toggle { border: 1px solid var(--line); background: #fb923c1f; color: var(--warn); padding: 6px 12px; border-radius: 999px; font: 700 12px var(--font); cursor: pointer; transition: .15s; min-width: 94px; }
+  .toggle.paid { background: #4ade8022; color: var(--ok); border-color: #4ade8055; }
+  .toggle:disabled { opacity: .45; cursor: not-allowed; }
+  .badges { display: flex; gap: 6px; margin-top: 12px; flex-wrap: wrap; }
+  .badge { font-size: 12px; padding: 4px 9px; border-radius: 999px; background: #ffffff10; border: 1px solid var(--line); }
+  .badge.off { opacity: .35; }
+  .person .foot { display: flex; justify-content: space-between; align-items: center; margin-top: 12px; gap: 8px; }
+  .xp { font-size: 12px; color: var(--muted); flex: 1; }
+  .empty { padding: 40px 20px; text-align: center; color: var(--muted); }
+  .empty .big { font-size: 48px; }
+
+  /* Login / quiz */
+  .login-bg { position: fixed; inset: 0; z-index: 45; display: none; align-items: center; justify-content: center; padding: 16px; overflow-y: auto;
+    background: radial-gradient(900px 500px at 50% -10%, #2a2468 0%, transparent 60%), var(--bg); }
+  .login-bg.open { display: flex; }
+  .login-card { width: 100%; max-width: 520px; margin: auto; padding: 30px 26px; background: #141a3ae6; border: 1px solid var(--line); border-radius: 24px; box-shadow: 0 30px 80px #000a; }
+  .login-step { animation: fade .3s ease; }
+  .login-kicker { color: var(--gold); font-weight: 700; letter-spacing: 2px; text-transform: uppercase; font-size: 12px; }
+  .login-card h2 { margin: 10px 0 10px; font-size: clamp(24px, 5vw, 32px); line-height: 1.2; }
+  .login-card p { color: var(--muted); line-height: 1.55; margin: 0 0 18px; }
+  .login-card .big-year { font-family: var(--font-title); font-size: clamp(64px, 16vw, 96px); line-height: 1; color: var(--gold); text-shadow: 0 0 30px #f4c95d55; margin: 6px 0 4px; }
+  .login-card input.big { width: 100%; font-size: 18px; padding: 14px 16px; }
+  .login-progress { display: flex; justify-content: space-between; align-items: center; color: var(--muted); font-size: 12px; margin-bottom: 4px; }
+  .login-progress + .bar { margin: 0 0 22px; height: 8px; }
+  .opts { display: grid; gap: 10px; }
+  .opt { text-align: left; padding: 14px 16px; border-radius: 14px; border: 1px solid var(--line); background: #ffffff08; color: var(--text); font: 500 15px/1.4 var(--font); cursor: pointer; transition: .15s; }
+  .opt:hover, .opt:focus-visible { border-color: var(--gold); background: #f4c95d14; outline: none; transform: translateX(3px); }
+  .login-actions { display: flex; justify-content: space-between; align-items: center; gap: 10px; margin-top: 20px; }
+  .link-btn { background: none; border: 0; color: var(--muted); font: 600 14px var(--font); cursor: pointer; padding: 8px 0; }
+  .link-btn:hover { color: var(--text); }
+  .field-error { color: #fca5a5; font-size: 13px; min-height: 18px; margin-top: 8px; }
+  .result-title { font-family: var(--font-title); font-size: clamp(26px, 6vw, 34px); color: var(--gold); margin: 4px 0 14px; }
+  .msg-box { background: #ffffff08; border-left: 3px solid var(--gold); padding: 14px 16px; border-radius: 12px; line-height: 1.6; margin-bottom: 12px; }
+  .msg-box.final { border-left-color: var(--pink); font-weight: 600; }
+  .me { display: flex; align-items: center; gap: 10px; font-size: 14px; color: var(--muted); }
+  .me b { color: var(--text); }
+  #meInfo { display: flex; align-items: center; gap: 10px; }
+  .live { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 600; color: var(--muted); padding: 5px 10px; border: 1px solid var(--line); border-radius: 999px; background: var(--card); white-space: nowrap; }
+  .live i { width: 8px; height: 8px; border-radius: 50%; background: var(--warn); }
+  .live.on { color: var(--ok); }
+  .live.on i { background: var(--ok); box-shadow: 0 0 8px var(--ok); animation: pulse 2s infinite; }
+  @keyframes pulse { 50% { opacity: .35; } }
+  .person.eu { border-color: #f472b6aa; box-shadow: 0 0 0 1px #f472b655, 0 10px 34px #f472b61a; }
+  .you { display: inline-block; margin-left: 6px; padding: 1px 7px; border-radius: 999px; background: #f472b626; color: var(--pink); font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .6px; vertical-align: middle; }
+  .opt:disabled { opacity: .5; cursor: wait; transform: none; }
+  .perfil-line { font-size: 12px; color: var(--gold); margin-top: 3px; }
+
+  #toast { position: fixed; left: 50%; bottom: 24px; transform: translateX(-50%) translateY(120px); background: #1d2350; border: 1px solid var(--gold); color: var(--text); padding: 12px 18px; border-radius: 14px; z-index: 60; transition: .35s cubic-bezier(.2,.9,.3,1.2); font-weight: 600; box-shadow: 0 10px 30px #0008; max-width: calc(100% - 32px); }
+  #toast.show { transform: translateX(-50%) translateY(0); }
+
+  @media (max-width: 640px) {
+    .add-person { grid-template-columns: 1fr 1fr; }
+    .add-person input[name=nome] { grid-column: 1 / -1; }
+    .brand h1 { font-size: 22px; }
+    nav.tabs { width: 100%; justify-content: space-between; }
+    nav.tabs button { flex: 1; padding: 9px 8px; }
+    .countdown div { min-width: 64px; }
+    .countdown b { font-size: 26px; }
+  }
+  @media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } }
+</style>
+</head>
+<body>
+<div class="stars"></div>
+<canvas id="fx"></canvas>
+
+<div class="wrap">
+  <header>
+    <div class="brand">
+      <div class="logo">🎆</div>
+      <div>
+        <h1>Réveillon <span>2027</span></h1>
+        <small>31/12 a 03/01 · a família toda na chácara</small>
+      </div>
+    </div>
+    <nav class="tabs" role="tablist">
+      <button class="active" data-tab="home">🏠 Início</button>
+      <button data-tab="menu">🍽️ Cardápio</button>
+      <button data-tab="pessoas">👨‍👩‍👧 Pessoas</button>
+    </nav>
+    <div class="me"><span class="live" id="live" title="Mudanças de qualquer celular aparecem aqui na hora"><i></i><span>conectando…</span></span><span id="meInfo"></span></div>
+  </header>
+
+  <!-- INÍCIO -->
+  <section class="view active" id="home">
+    <div class="card hero">
+      <div class="kicker">Contagem regressiva</div>
+      <h2>Rumo à virada! 🥂</h2>
+      <div class="countdown" id="countdown"></div>
+    </div>
+    <div class="stats" id="stats"></div>
+    <div class="card mission" id="mission"></div>
+    <h2>🏆 Conquistas da família</h2>
+    <div class="achievements" id="achievements"></div>
+  </section>
+
+  <!-- CARDÁPIO -->
+  <section class="view" id="menu">
+    <div class="toolbar">
+      <h2 style="margin:0">🍽️ Cardápio dos 4 dias</h2>
+      <button class="btn" data-action="toggle-edit" id="editBtn">✏️ Editar valores</button>
+    </div>
+    <p class="muted">Toque em um prato para ver os detalhes.</p>
+    <div id="menuList"></div>
+    <div class="card summary" id="summary"></div>
+  </section>
+
+  <!-- PESSOAS -->
+  <section class="view" id="pessoas">
+    <h2>👨‍👩‍👧 Quem vai pra virada</h2>
+    <form class="card add-person" id="addForm" autocomplete="off">
+      <input name="nome" placeholder="Nome da pessoa" required maxlength="40">
+      <select name="tipo">
+        <option value="adulto">Adulto (cota inteira)</option>
+        <option value="crianca">Criança (meia cota)</option>
+        <option value="isento">Isento</option>
+      </select>
+      <button class="btn gold" type="submit">➕ Adicionar</button>
+    </form>
+    <div class="card chacara-box">
+      <div class="grow">
+        <b>🏡 Valor total da chácara</b>
+        <div class="muted" style="font-size:13px">Deixe vazio enquanto estiver em aberto. É dividido entre os adultos e crianças, igual à comida.</div>
+      </div>
+      <input type="number" min="0" step="10" id="chacaraInput" placeholder="Em aberto" style="width:160px">
+    </div>
+    <div class="people" id="peopleList"></div>
+  </section>
+</div>
+
+<div class="modal-bg" id="mealModal" role="dialog" aria-modal="true" aria-label="Detalhes do prato">
+  <div class="modal" id="mealModalBody"></div>
+</div>
+
+<div class="login-bg" id="login" role="dialog" aria-modal="true" aria-label="Entrada do Réveillon">
+  <div class="login-card" id="loginCard"></div>
+</div>
+
+<div id="toast"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.50.0/dist/umd/supabase.min.js"></script>
+<script>
+(() => {
+  // Supabase — a chave "publishable" é pública e pode ficar no front-end.
+  // Quem protege os dados são as regras do banco (RLS + permissões por coluna).
+  const SUPA_URL = "https://emdwczkmizndqeivdusi.supabase.co";
+  const SUPA_KEY = "sb_publishable_cAhLIPlFoPmvyZnVkjHKcg_MnHUekDr";
+  const FOTO_BASE = `${SUPA_URL}/storage/v1/object/public/fotos/`;
+  const SESSAO_KEY = "reveillon2027_sessao";
+  const sb = window.supabase.createClient(SUPA_URL, SUPA_KEY);
+  const PESO = { adulto: 1, crianca: 0.5, isento: 0 };
+  const TIPO_LABEL = { adulto: "Adulto", crianca: "Criança", isento: "Isento" };
+  const PERFIS = {
+    super: { titulo: "Supersticioso Profissional",
+      texto: "Você vai entrar em 2027 com tanta simpatia que o ano não vai ter coragem de dar errado. Só não esquece de pagar sua parte do churrasco, porque isso nenhuma uva resolve." },
+    fome: { titulo: "Esfomeado Oficial",
+      texto: "Seu plano para 2027 é simples: comer bem, comer de novo e perguntar se tem sobremesa. A família agradece, porque com você na mesa nunca sobra nada para jogar fora." },
+    sono: { titulo: "Dorminhoco da Virada",
+      texto: "Existe uma chance real de você assistir à contagem regressiva no vídeo de alguém, no dia seguinte. Tudo bem: para você, 2027 começa quando acordar." },
+    festa: { titulo: "Festeiro Caótico",
+      texto: "Você é quem puxa a contagem, erra os números e mesmo assim faz todo mundo gritar. 2027 ainda não sabe o que está vindo por aí." },
+  };
+  const QUIZ = [
+    { q: "Meia-noite chegou. Onde você está?", opts: [
+      ["Pulando sete ondinhas, mesmo sem ter mar por perto", "super"],
+      ["Na mesa, defendendo o último pedaço de pernil", "fome"],
+      ["Dormindo no sofá desde as dez da noite", "sono"],
+      ["Puxando a contagem regressiva dez segundos adiantada", "festa"] ] },
+    { q: "Qual a cor da sua roupa da virada?", opts: [
+      ["Amarelo, porque 2027 tem que vir com dinheiro", "super"],
+      ["Branco, mesmo sabendo que vai sujar de farofa", "fome"],
+      ["A primeira que estava limpa no varal", "sono"],
+      ["Vermelho, pelo amor. Ou pelo menos por um crush", "festa"] ] },
+    { q: "Sua promessa de Ano Novo é...", opts: [
+      ["Atrair coisas boas. Já comprei até um cristal", "super"],
+      ["Economizar, começando logo depois do churrasco", "fome"],
+      ["Dormir mais cedo, a partir de 2028", "sono"],
+      ["Academia em janeiro, válida até o dia 8", "festa"] ] },
+    { q: "Na hora do churrasco, você é...", opts: [
+      ["Quem benze a carne para ela não queimar", "super"],
+      ["Quem fica rodeando a churrasqueira, só provando", "fome"],
+      ["Quem chega quando a carne já acabou", "sono"],
+      ["O assador oficial que não larga o espeto por nada", "festa"] ] },
+    { q: "Dia 1º, sobras da ceia na geladeira. Sua reação?", opts: [
+      ["Guardo uma semente de romã na carteira antes de tudo", "super"],
+      ["Café da manhã de pernil, sem culpa nenhuma", "fome"],
+      ["Ainda estou digerindo a ceia, me acorda no almoço", "sono"],
+      ["Misturo tudo num prato só e chamo de gourmet", "festa"] ] },
+    { q: "Qual simpatia você vai fazer para 2027?", opts: [
+      ["Doze uvas, uma por mês, mesmo engasgando na sétima", "super"],
+      ["Comer de tudo um pouco. Alguma simpatia deve funcionar", "fome"],
+      ["Dormir antes da meia-noite. Sorte é acordar descansado", "sono"],
+      ["Pular sete ondas na piscina da chácara", "festa"] ] },
+  ];
+  const AVATAR_COLORS = ["#f4c95d", "#f472b6", "#60a5fa", "#4ade80", "#c084fc", "#fb923c", "#2dd4bf", "#f87171"];
+
+  // ---------- state (vem do Supabase) ----------
+  const state = { reserva: 0, chacaraTotal: null, menu: [], pessoas: [] };
+  let sessao = lerSessao();   // id da pessoa logada neste aparelho
+  let editMode = false;
+  let pronto = false;
+  const criando = new Set();  // ids que este aparelho acabou de criar (evita aviso duplicado)
+
+  function lerSessao() { try { return localStorage.getItem(SESSAO_KEY); } catch (e) { return null; } }
+  function gravarSessao(id) {
+    sessao = id;
+    try { id ? localStorage.setItem(SESSAO_KEY, id) : localStorage.removeItem(SESSAO_KEY); } catch (e) {}
+  }
+
+  const num = (v) => (v == null ? null : Number(v));
+  const fotoOk = (u) => (typeof u === "string" && u.startsWith(FOTO_BASE) && !/["'<>\s]/.test(u) ? u : null);
+  const fromPessoa = (r) => ({
+    id: r.id, nome: r.nome, idade: r.idade, tipo: r.tipo, perfil: r.perfil,
+    pagouComida: !!r.pagou_comida, pagouChacara: !!r.pagou_chacara, foto: fotoOk(r.foto_url),
+  });
+  const fromMeal = (r) => ({
+    id: r.id, ordem: r.ordem, dia: r.dia, semana: r.semana, refeicao: r.refeicao, nome: r.nome, emoji: r.emoji, bg: r.bg,
+    itens: r.itens || [], desc: r.descricao || "", valor: num(r.valor), foto: fotoOk(r.foto_url),
+  });
+
+  async function carregar() {
+    const [c, m, p] = await Promise.all([
+      sb.from("config").select("*").eq("id", 1).single(),
+      sb.from("refeicoes").select("*").order("ordem"),
+      sb.from("pessoas").select("*").order("created_at"),
+    ]);
+    const err = c.error || m.error || p.error;
+    if (err) throw err;
+    state.reserva = num(c.data.reserva) || 0;
+    state.chacaraTotal = num(c.data.chacara_total);
+    state.menu = m.data.map(fromMeal);
+    state.pessoas = p.data.map(fromPessoa);
+  }
+
+  // busca tudo de novo (ex.: celular voltou do bloqueio) sem atrapalhar quem está usando
+  async function sincronizar() {
+    try { await carregar(); } catch (e) { console.error(e); return; }
+    agendarRender();
+    checarSessao();
+  }
+
+  // grava no banco; se falhar, avisa e volta para o que está salvo lá
+  async function gravar(query, msg = "⚠️ Não deu para salvar. Confere a internet e tenta de novo.") {
+    const { error } = await query;
+    if (error) { console.error(error); toast(msg); await sincronizar(); return false; }
+    return true;
+  }
+
+  function checarSessao() {
+    if (!pronto || $("#login").classList.contains("open")) return;
+    if (!state.pessoas.some((p) => p.id === sessao)) {
+      gravarSessao(null);
+      toast("👋 Seu cadastro saiu da lista. Entra de novo!");
+      startLogin();
+    }
+  }
+
+  // ---------- fotos (Supabase Storage) ----------
+  function reduzirFoto(file, max) {
+    return new Promise((resolve, reject) => {
+      const r = new FileReader();
+      r.onerror = reject;
+      r.onload = (ev) => {
+        const img = new Image();
+        img.onerror = reject;
+        img.onload = () => {
+          const s = Math.min(1, max / Math.max(img.width, img.height));
+          const c = document.createElement("canvas");
+          c.width = Math.round(img.width * s); c.height = Math.round(img.height * s);
+          c.getContext("2d").drawImage(img, 0, 0, c.width, c.height);
+          c.toBlob((b) => (b ? resolve(b) : reject(new Error("toBlob falhou"))), "image/jpeg", 0.82);
+        };
+        img.src = ev.target.result;
+      };
+      r.readAsDataURL(file);
+    });
+  }
+  function apagarFoto(url) {
+    if (fotoOk(url)) sb.storage.from("fotos").remove([url.slice(FOTO_BASE.length)]).catch(() => {});
+  }
+  async function trocarFoto(file, max, tabela, id) {
+    const lista = tabela === "pessoas" ? state.pessoas : state.menu;
+    if (!lista.some((x) => x.id === id)) return null;
+    toast("📤 Enviando foto…");
+    try {
+      const blob = await reduzirFoto(file, max);
+      const path = `${tabela}/${id}-${Date.now()}.jpg`;
+      const up = await sb.storage.from("fotos").upload(path, blob, { contentType: "image/jpeg", cacheControl: "31536000" });
+      if (up.error) throw up.error;
+      const url = sb.storage.from("fotos").getPublicUrl(path).data.publicUrl;
+      const { error } = await sb.from(tabela).update({ foto_url: url }).eq("id", id);
+      if (error) { sb.storage.from("fotos").remove([path]).catch(() => {}); throw error; }
+      const alvo = lista.find((x) => x.id === id);
+      if (!alvo) return null;
+      const antiga = alvo.foto;
+      alvo.foto = fotoOk(url);
+      if (antiga && antiga !== alvo.foto) apagarFoto(antiga);
+      return alvo;
+    } catch (e) {
+      console.error(e);
+      toast("⚠️ Não deu para enviar a foto. Tenta outra ou confere a internet.");
+      return null;
+    }
+  }
+
+  // ---------- ao vivo (Supabase Realtime) ----------
+  let canal, jaConectou = false;
+  function setLive(on) {
+    const el = $("#live");
+    el.classList.toggle("on", on);
+    el.querySelector("span").textContent = on ? "ao vivo" : "reconectando…";
+  }
+  function conectarAoVivo() {
+    if (canal) return;
+    canal = sb.channel("festa")
+      .on("postgres_changes", { event: "*", schema: "public", table: "pessoas" }, aoMudarPessoa)
+      .on("postgres_changes", { event: "*", schema: "public", table: "refeicoes" }, aoMudarRefeicao)
+      .on("postgres_changes", { event: "UPDATE", schema: "public", table: "config" }, aoMudarConfig)
+      .subscribe((status) => {
+        const on = status === "SUBSCRIBED";
+        setLive(on);
+        if (on && jaConectou) sincronizar(); // pega o que mudou enquanto estava desconectado
+        if (on) jaConectou = true;
+      });
+  }
+  function aoMudarPessoa({ eventType, new: n, old: o }) {
+    if (eventType === "DELETE") {
+      if (!state.pessoas.some((x) => x.id === o.id)) return;
+      state.pessoas = state.pessoas.filter((x) => x.id !== o.id);
+      agendarRender();
+      if (o.id === sessao) checarSessao();
+      return;
+    }
+    const nx = fromPessoa(n);
+    const i = state.pessoas.findIndex((x) => x.id === nx.id);
+    if (i < 0) {
+      state.pessoas.push(nx);
+      if (!criando.has(nx.id)) { toast(`🎉 ${nx.nome} chegou na festa!`); fx.burst(innerWidth / 2, 140, 60); }
+    } else {
+      const prev = state.pessoas[i];
+      const pagou = (!prev.pagouComida && nx.pagouComida) || (!prev.pagouChacara && nx.pagouChacara);
+      state.pessoas[i] = nx;
+      if (pagou) {
+        const st = statusDe(nx);
+        toast(st.lvl === 2 ? `👑 ${nx.nome} virou Lenda da Virada!` : `💸 ${nx.nome} pagou! Valeu!`);
+        if (st.lvl === 2) celebrate(); else fx.burst(innerWidth / 2, 140, 80);
+      }
+    }
+    agendarRender();
+  }
+  function aoMudarRefeicao({ eventType, new: n, old: o }) {
+    if (eventType === "DELETE") state.menu = state.menu.filter((x) => x.id !== o.id);
+    else {
+      const m = fromMeal(n), i = state.menu.findIndex((x) => x.id === m.id);
+      if (i < 0) state.menu.push(m); else state.menu[i] = m;
+      state.menu.sort((a, b) => a.ordem - b.ordem);
+    }
+    agendarRender();
+  }
+  function aoMudarConfig({ new: n }) {
+    state.reserva = num(n.reserva) || 0;
+    state.chacaraTotal = num(n.chacara_total);
+    agendarRender();
+  }
+
+  let renderPend = false;
+  function agendarRender() {
+    if (renderPend) return;
+    renderPend = true;
+    requestAnimationFrame(() => {
+      renderPend = false;
+      renderHome(); renderPessoas(); renderMe();
+      // não redesenha o cardápio enquanto alguém digita um valor nele
+      if (!document.activeElement?.matches?.("#menu input")) renderMenu();
+      if (openMealId) renderModal();
+    });
+  }
+
+  // ---------- helpers ----------
+  const $ = (s, el = document) => el.querySelector(s);
+  const brl = (v) => v.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
+  const esc = (s) => String(s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+  const norm = (s) => s.normalize("NFD").replace(/[̀-ͯ]/g, "").trim().replace(/\s+/g, " ").toLowerCase();
+  const novoId = () => (crypto.randomUUID ? crypto.randomUUID()
+    : "10000000-1000-4000-8000-100000000000".replace(/[018]/g, (c) => (c ^ (crypto.getRandomValues(new Uint8Array(1))[0] & (15 >> (c / 4)))).toString(16)));
+
+  const subtotalMenu = () => state.menu.reduce((s, m) => s + (m.valor || 0), 0);
+  const totalComida = () => subtotalMenu() + (state.reserva || 0);
+  const somaPesos = () => state.pessoas.reduce((s, p) => s + PESO[p.tipo], 0);
+  const cota = (p, total) => { const sp = somaPesos(); return sp ? (total * PESO[p.tipo]) / sp : 0; };
+  const chacaraDefinida = () => typeof state.chacaraTotal === "number" && state.chacaraTotal > 0;
+  const precisaPagar = (p) => PESO[p.tipo] > 0;
+
+  function statusDe(p) {
+    if (!precisaPagar(p)) return { cls: "legend", txt: "🎁 Convidado VIP", lvl: 2 };
+    const c = p.pagouComida, h = chacaraDefinida() ? p.pagouChacara : false;
+    if (c && h) return { cls: "legend", txt: "👑 Lenda da Virada", lvl: 2 };
+    if (c || p.pagouChacara) return { cls: "half", txt: "⭐ Meio caminho", lvl: 1 };
+    return { cls: "", txt: "⏳ Na fila da festa", lvl: 0 };
+  }
+  function xpDe(p) {
+    let xp = 0;
+    if (p.pagouComida) xp += 100;
+    if (p.pagouChacara) xp += 100;
+    if (p.foto) xp += 20;
+    return xp;
+  }
+
+  function arrecadado() {
+    const tc = totalComida(), th = chacaraDefinida() ? state.chacaraTotal : 0;
+    let comida = 0, chacara = 0;
+    state.pessoas.forEach((p) => {
+      if (p.pagouComida) comida += cota(p, tc);
+      if (p.pagouChacara && th) chacara += cota(p, th);
+    });
+    return { comida, chacara, tc, th };
+  }
+
+  // ---------- render ----------
+  function renderAll() { renderHome(); renderMenu(); renderPessoas(); }
+
+  function renderHome() {
+    const a = arrecadado();
+    const n = state.pessoas.length;
+    const meta = a.tc + a.th;
+    const got = a.comida + a.chacara;
+    const pct = meta && n ? Math.min(100, Math.round((got / meta) * 100)) : 0;
+    const quitados = state.pessoas.filter((p) => statusDe(p).lvl === 2).length;
+
+    $("#stats").innerHTML = `
+      <div class="card stat"><div class="label">🍽️ Orçamento da comida</div><div class="value">${brl(a.tc)}</div><div class="sub">${state.menu.length} refeições + reserva de ${brl(state.reserva)}</div></div>
+      <div class="card stat"><div class="label">💰 Comida arrecadada</div><div class="value">${brl(a.comida)}</div><div class="sub">faltam ${brl(Math.max(0, a.tc - a.comida))}</div></div>
+      <div class="card stat"><div class="label">🏡 Chácara</div><div class="value">${chacaraDefinida() ? brl(a.th) : "Em aberto"}</div><div class="sub">${chacaraDefinida() ? "arrecadado " + brl(a.chacara) : "valor ainda não definido"}</div></div>
+      <div class="card stat"><div class="label">👨‍👩‍👧 Pessoas</div><div class="value">${n}</div><div class="sub">${quitados} já quitaram tudo</div></div>`;
+
+    const msg = !n ? "Adicione a família na aba Pessoas para começar a missão!"
+      : pct >= 100 ? "Missão cumprida! Agora é só curtir a virada 🎉"
+      : pct >= 50 ? "Mais da metade! A festa já está garantida 🔥"
+      : pct > 0 ? "A missão começou — bora juntar o resto! 💪"
+      : "Ninguém pagou ainda… quem vai ser o primeiro? 👀";
+
+    $("#mission").innerHTML = `
+      <div class="mission-head"><b>🎯 Missão Réveillon</b><span class="muted">${brl(got)} de ${brl(meta)}${chacaraDefinida() ? "" : " (só comida, chácara em aberto)"}</span></div>
+      <div class="bar"><i style="width:${pct}%"></i></div>
+      <div class="mission-head" style="margin-top:8px"><span>${msg}</span><b style="color:var(--gold)">${pct}%</b></div>`;
+
+    const pctComida = a.tc ? a.comida / a.tc : 0;
+    const achs = [
+      { ico: "👥", t: "Turma reunida", d: "5+ pessoas confirmadas", ok: n >= 5 },
+      { ico: "🥇", t: "Primeiro Pix", d: "alguém já pagou", ok: state.pessoas.some((p) => p.pagouComida || p.pagouChacara) },
+      { ico: "🔥", t: "Meio caminho", d: "50% da comida paga", ok: n > 0 && pctComida >= 0.5 },
+      { ico: "🍖", t: "Comida garantida", d: "100% da comida paga", ok: n > 0 && pctComida >= 0.999 },
+      { ico: "🏡", t: "Chácara definida", d: "valor fechado", ok: chacaraDefinida() },
+      { ico: "👑", t: "Réveillon quitado", d: "tudo pago, só curtir", ok: n > 0 && chacaraDefinida() && pct >= 100 },
+    ];
+    $("#achievements").innerHTML = achs.map((x) => `
+      <div class="card ach ${x.ok ? "unlocked" : "locked"}"><div class="ico">${x.ok ? x.ico : "🔒"}</div><b>${x.t}</b><small>${x.d}</small></div>`).join("");
+  }
+
+  function renderMenu() {
+    const days = [];
+    state.menu.forEach((m) => {
+      let d = days.find((x) => x.dia === m.dia);
+      if (!d) days.push((d = { dia: m.dia, semana: m.semana, items: [] }));
+      d.items.push(m);
+    });
+    const dayTitle = { "31/12": "A virada 🎇", "01/01": "Ressaca boa", "02/01": "Dia do churrasco", "03/01": "Despedida" };
+
+    $("#menuList").innerHTML = days.map((d) => `
+      <div class="day">
+        <div class="day-head">
+          <div class="date"><small>${d.semana}</small>${d.dia}</div>
+          <h3>${dayTitle[d.dia] || ""}</h3>
+        </div>
+        <div class="card meal-list">${d.items.map(mealRow).join("")}</div>
+      </div>`).join("");
+
+    $("#summary").innerHTML = `
+      <table>
+        ${state.menu.filter((m) => m.valor !== null).map((m) => `<tr><td>${m.emoji} ${esc(m.nome)}</td><td>${brl(m.valor)}</td></tr>`).join("")}
+        <tr><td><b>Subtotal</b></td><td>${brl(subtotalMenu())}</td></tr>
+        <tr><td>🛟 Reserva para imprevistos</td><td>${editMode ? `<input type="number" min="0" step="10" data-reserva value="${state.reserva}" style="width:110px">` : brl(state.reserva)}</td></tr>
+        <tr class="total"><td>Total</td><td>${brl(totalComida())}</td></tr>
+      </table>`;
+    $("#editBtn").textContent = editMode ? "✅ Concluir edição" : "✏️ Editar valores";
+  }
+
+  function priceTag(m) {
+    if (m.valor === null) return `<span class="price-tag out">Fora do orçamento</span>`;
+    if (m.valor === 0) return `<span class="price-tag free">Grátis ✨</span>`;
+    return `<span class="price-tag">${brl(m.valor)}</span>`;
+  }
+  const refIco = (m) => (m.refeicao === "Almoço" ? "☀️" : "🌙");
+
+  function mealRow(m) {
+    const price = editMode && m.valor !== null
+      ? `<input type="number" min="0" step="10" data-valor="${m.id}" value="${m.valor}" aria-label="Valor de ${esc(m.nome)}">`
+      : priceTag(m);
+    return `
+      <div class="meal-row" role="button" tabindex="0" data-action="open-meal" data-id="${m.id}">
+        <div class="thumb" style="background:${m.bg}">${m.foto ? `<img src="${esc(m.foto)}" alt="" loading="lazy">` : m.emoji}</div>
+        <div class="info">
+          <span class="when">${refIco(m)} ${m.refeicao}</span>
+          <b>${esc(m.nome)}</b>
+          <small>${esc(m.desc)}</small>
+        </div>
+        ${price}
+        <span class="chev">›</span>
+      </div>`;
+  }
+
+  // ---------- modal ----------
+  let openMealId = null;
+  function openMeal(id) {
+    openMealId = id;
+    renderModal();
+    $("#mealModal").classList.add("open");
+    document.body.style.overflow = "hidden";
+    $("#mealModal .close")?.focus();
+  }
+  function closeMeal() {
+    if (!openMealId) return;
+    const last = openMealId;
+    openMealId = null;
+    $("#mealModal").classList.remove("open");
+    document.body.style.overflow = "";
+    document.querySelector(`.meal-row[data-id="${last}"]`)?.focus();
+  }
+  function renderModal() {
+    const i = state.menu.findIndex((m) => m.id === openMealId);
+    const m = state.menu[i];
+    if (!m) return;
+    const prev = state.menu[i - 1], next = state.menu[i + 1];
+    const sp = somaPesos();
+    const porPessoa = m.valor === null ? "—" : m.valor === 0 ? "Grátis" : sp ? brl(m.valor / sp) : "sem pessoas";
+    const valor = m.valor === null ? "Fora do orçamento" : m.valor === 0 ? "Grátis ✨" : brl(m.valor);
+    $("#mealModalBody").innerHTML = `
+      <div class="photo" style="background:${m.bg}">
+        ${m.foto ? `<img src="${esc(m.foto)}" alt="${esc(m.nome)}">` : m.emoji}
+        <span class="tag">${refIco(m)} ${m.refeicao} · ${m.semana} ${m.dia}</span>
+        <button class="close" data-action="close-meal" aria-label="Fechar">✕</button>
+        <div class="photo-actions">
+          ${m.foto ? `<button data-action="rm-meal-photo" data-id="${m.id}">Remover</button>` : ""}
+          <label>📷 ${m.foto ? "Trocar foto" : "Pôr foto"}<input type="file" accept="image/*" hidden data-meal-photo="${m.id}"></label>
+        </div>
+      </div>
+      <div class="content">
+        <h3>${esc(m.nome)}</h3>
+        <p class="desc">${esc(m.desc)}</p>
+        ${m.itens && m.itens.length ? `<h5>O que vai no prato</h5><div class="chips">${m.itens.map((x) => `<span class="chip">${esc(x)}</span>`).join("")}</div>` : ""}
+        <div class="modal-stats">
+          <div><small>💰 Orçamento</small><b>${valor}</b></div>
+          <div><small>👤 Por pessoa</small><b>${porPessoa}</b></div>
+        </div>
+        <div class="modal-nav">
+          <button class="btn" data-action="open-meal" data-id="${prev ? prev.id : ""}" ${prev ? "" : "disabled style='visibility:hidden'"}>‹ ${prev ? esc(prev.nome) : ""}</button>
+          <button class="btn" data-action="open-meal" data-id="${next ? next.id : ""}" ${next ? "" : "disabled style='visibility:hidden'"}>${next ? esc(next.nome) : ""} ›</button>
+        </div>
+      </div>`;
+  }
+
+  let pendingDelete = null;
+  function renderPessoas() {
+    const inp = $("#chacaraInput");
+    if (document.activeElement !== inp) inp.value = chacaraDefinida() ? state.chacaraTotal : "";
+
+    const tc = totalComida(), th = chacaraDefinida() ? state.chacaraTotal : 0;
+    if (!state.pessoas.length) {
+      $("#peopleList").innerHTML = `<div class="card empty" style="grid-column:1/-1"><div class="big">🎉</div>Ninguém na lista ainda. Adicione o primeiro convidado aí em cima!</div>`;
+      return;
+    }
+    const sorted = [...state.pessoas].sort((a, b) => statusDe(b).lvl - statusDe(a).lvl || xpDe(b) - xpDe(a) || a.nome.localeCompare(b.nome));
+    const medals = ["🥇", "🥈", "🥉"];
+
+    $("#peopleList").innerHTML = sorted.map((p, i) => {
+      const st = statusDe(p);
+      const xp = xpDe(p);
+      const paga = precisaPagar(p);
+      const color = AVATAR_COLORS[[...p.nome].reduce((s, c) => s + c.charCodeAt(0), 0) % AVATAR_COLORS.length];
+      const cc = cota(p, tc), ch = th ? cota(p, th) : 0;
+      return `
+      <div class="card person ${st.lvl === 2 ? "legend" : ""} ${p.id === sessao ? "eu" : ""}">
+        ${st.lvl > 0 && i < 3 ? `<div class="rank">${medals[i]}</div>` : ""}
+        <div class="top">
+          <label class="avatar" style="background:${color}" title="Trocar foto">
+            ${p.foto ? `<img src="${esc(p.foto)}" alt="" loading="lazy">` : esc(p.nome.trim()[0] || "?").toUpperCase()}
+            <input type="file" accept="image/*" data-person-photo="${p.id}">
+          </label>
+          <div>
+            <div class="name">${esc(p.nome)}${p.id === sessao ? `<span class="you">você</span>` : ""}</div>
+            <div class="muted" style="font-size:12px">${TIPO_LABEL[p.tipo]}${p.idade != null ? ` · ${p.idade} anos` : ""}</div>
+            ${p.perfil && PERFIS[p.perfil] ? `<div class="perfil-line">${PERFIS[p.perfil].titulo}</div>` : ""}
+            <span class="status-pill ${st.cls}">${st.txt}</span>
+          </div>
+        </div>
+        <div class="lines">
+          <div class="line">
+            <div><div class="what">🍽️ Comida</div><div class="amt">${paga ? brl(cc) : "—"}</div></div>
+            <button class="toggle ${p.pagouComida ? "paid" : ""}" data-action="pay" data-field="pagouComida" data-id="${p.id}" ${paga ? "" : "disabled"}>${p.pagouComida ? "✅ Pago" : "⏳ Em aberto"}</button>
+          </div>
+          <div class="line">
+            <div><div class="what">🏡 Chácara</div><div class="amt ${th ? "" : "open"}">${!paga ? "—" : th ? brl(ch) : "a definir"}</div></div>
+            <button class="toggle ${p.pagouChacara ? "paid" : ""}" data-action="pay" data-field="pagouChacara" data-id="${p.id}" ${paga && th ? "" : "disabled"}>${p.pagouChacara ? "✅ Pago" : "⏳ Em aberto"}</button>
+          </div>
+        </div>
+        <div class="badges">
+          <span class="badge ${p.pagouComida ? "" : "off"}">🍔 Comida garantida</span>
+          <span class="badge ${p.pagouChacara ? "" : "off"}">🏡 Chácara garantida</span>
+          <span class="badge ${p.foto ? "" : "off"}">📸 Fotogênico</span>
+        </div>
+        <div class="foot">
+          <div class="xp">⚡ ${xp} XP<div class="bar small"><i style="width:${Math.min(100, (xp / 220) * 100)}%"></i></div></div>
+          <select data-tipo="${p.id}" style="padding:6px 8px;font-size:12px">
+            ${Object.keys(PESO).map((t) => `<option value="${t}" ${p.tipo === t ? "selected" : ""}>${TIPO_LABEL[t]}</option>`).join("")}
+          </select>
+          <button class="btn sm danger" data-action="del" data-id="${p.id}">${pendingDelete === p.id ? "Confirmar?" : "🗑️"}</button>
+        </div>
+      </div>`;
+    }).join("");
+  }
+
+  // ---------- events ----------
+  document.querySelectorAll("nav.tabs button").forEach((b) => b.addEventListener("click", () => {
+    document.querySelectorAll("nav.tabs button").forEach((x) => x.classList.toggle("active", x === b));
+    document.querySelectorAll("section.view").forEach((s) => s.classList.toggle("active", s.id === b.dataset.tab));
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }));
+
+  $("#addForm").addEventListener("submit", (e) => {
+    e.preventDefault();
+    const f = e.target;
+    const nome = f.nome.value.trim().replace(/\s+/g, " ");
+    if (nome.length < 2) return toast("✋ O nome precisa de pelo menos duas letras");
+    if (state.pessoas.some((p) => norm(p.nome) === norm(nome))) return toast(`🤔 ${nome} já está na lista`);
+    const p = { id: novoId(), nome, idade: null, tipo: f.tipo.value, perfil: null, pagouComida: false, pagouChacara: false, foto: null };
+    criando.add(p.id);
+    state.pessoas.push(p); renderAll();
+    f.nome.value = ""; f.nome.focus();
+    toast(`🎉 ${nome} entrou para a festa!`);
+    gravar(sb.from("pessoas").insert({ id: p.id, nome, tipo: p.tipo }), `⚠️ Não deu para adicionar ${nome}.`);
+  });
+
+  let chacaraTimer;
+  $("#chacaraInput").addEventListener("input", (e) => {
+    const v = parseFloat(e.target.value);
+    state.chacaraTotal = isFinite(v) && v > 0 ? v : null;
+    renderHome(); renderPessoas();
+    clearTimeout(chacaraTimer);
+    chacaraTimer = setTimeout(() => gravar(sb.from("config").update({ chacara_total: state.chacaraTotal }).eq("id", 1)), 700);
+  });
+
+  $("#mealModal").addEventListener("click", (e) => { if (e.target.id === "mealModal") closeMeal(); });
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") closeMeal();
+    if ((e.key === "Enter" || e.key === " ") && e.target.matches(".meal-row")) { e.preventDefault(); openMeal(e.target.dataset.id); }
+  });
+
+  document.addEventListener("click", (e) => {
+    if (e.target.closest(".meal-row input")) return; // editar valor não abre o modal
+    const el = e.target.closest("[data-action]");
+    if (!el) { if (pendingDelete) { pendingDelete = null; renderPessoas(); } return; }
+    const { action, id } = el.dataset;
+
+    if (action === "pay") {
+      const p = state.pessoas.find((x) => x.id === id);
+      if (!p) return;
+      const field = el.dataset.field;
+      p[field] = !p[field];
+      renderAll();
+      if (p[field]) {
+        const r = el.getBoundingClientRect();
+        fx.burst(r.left + r.width / 2, r.top + r.height / 2, 80);
+        const st = statusDe(p);
+        toast(st.lvl === 2 ? `👑 ${p.nome} virou Lenda da Virada!` : `💸 ${p.nome} pagou! Valeu!`);
+        if (st.lvl === 2) celebrate();
+      }
+      gravar(sb.from("pessoas").update({ [field === "pagouComida" ? "pagou_comida" : "pagou_chacara"]: p[field] }).eq("id", id));
+    }
+    if (action === "del") {
+      if (pendingDelete === id) {
+        const p = state.pessoas.find((x) => x.id === id);
+        if (!p) return;
+        state.pessoas = state.pessoas.filter((x) => x.id !== id);
+        pendingDelete = null; renderAll();
+        toast(`👋 ${p.nome} saiu da lista`);
+        gravar(sb.from("pessoas").delete().eq("id", id), `⚠️ Não deu para tirar ${p.nome} da lista.`)
+          .then((ok) => { if (ok && p.foto) apagarFoto(p.foto); });
+        if (id === sessao) { gravarSessao(null); startLogin(); }
+      } else { pendingDelete = id; renderPessoas(); }
+      return;
+    }
+    if (action === "toggle-edit") { editMode = !editMode; renderMenu(); }
+    if (action === "open-meal" && id) openMeal(id);
+    if (action === "close-meal") closeMeal();
+    if (action === "rm-meal-photo") {
+      const m = state.menu.find((x) => x.id === id);
+      if (m) {
+        const antiga = m.foto;
+        m.foto = null; renderMenu(); renderModal();
+        gravar(sb.from("refeicoes").update({ foto_url: null }).eq("id", id)).then((ok) => { if (ok) apagarFoto(antiga); });
+      }
+    }
+    if (pendingDelete) { pendingDelete = null; renderPessoas(); }
+  });
+
+  document.addEventListener("change", (e) => {
+    const t = e.target;
+    if (t.dataset.tipo) {
+      const p = state.pessoas.find((x) => x.id === t.dataset.tipo);
+      if (!p) return;
+      p.tipo = t.value; renderAll();
+      gravar(sb.from("pessoas").update({ tipo: p.tipo }).eq("id", p.id));
+    }
+    if (t.dataset.valor) {
+      const m = state.menu.find((x) => x.id === t.dataset.valor);
+      if (!m) return;
+      const v = parseFloat(t.value);
+      m.valor = isFinite(v) && v >= 0 ? v : 0;
+      renderMenu(); renderHome(); renderPessoas();
+      gravar(sb.from("refeicoes").update({ valor: m.valor }).eq("id", m.id));
+    }
+    if (t.hasAttribute("data-reserva")) {
+      const v = parseFloat(t.value);
+      state.reserva = isFinite(v) && v >= 0 ? v : 0;
+      renderMenu(); renderHome(); renderPessoas();
+      gravar(sb.from("config").update({ reserva: state.reserva }).eq("id", 1));
+    }
+    if (t.dataset.mealPhoto && t.files[0]) {
+      trocarFoto(t.files[0], 900, "refeicoes", t.dataset.mealPhoto).then((m) => {
+        if (!m) return;
+        renderMenu(); renderModal(); toast("📸 Foto do prato atualizada!");
+      });
+    }
+    if (t.dataset.personPhoto && t.files[0]) {
+      trocarFoto(t.files[0], 400, "pessoas", t.dataset.personPhoto).then((p) => {
+        if (!p) return;
+        renderPessoas(); toast(`📸 ${p.nome} ganhou a conquista Fotogênico!`);
+      });
+    }
+  });
+
+  let toastTimer;
+  function toast(msg) {
+    const t = $("#toast");
+    t.textContent = msg; t.classList.add("show");
+    clearTimeout(toastTimer); toastTimer = setTimeout(() => t.classList.remove("show"), 2600);
+  }
+
+  // ---------- countdown ----------
+  const target = new Date(2027, 0, 1, 0, 0, 0);
+  function tick() {
+    let diff = Math.max(0, target - new Date());
+    const d = Math.floor(diff / 864e5); diff -= d * 864e5;
+    const h = Math.floor(diff / 36e5); diff -= h * 36e5;
+    const m = Math.floor(diff / 6e4); diff -= m * 6e4;
+    const s = Math.floor(diff / 1e3);
+    const pad = (n) => String(n).padStart(2, "0");
+    $("#countdown").innerHTML = target - new Date() <= 0
+      ? `<div style="padding:14px 24px"><b>FELIZ 2027! 🎉</b></div>`
+      : [[d, "dias"], [h, "horas"], [m, "min"], [s, "seg"]].map(([v, l]) => `<div><b>${pad(v)}</b><span>${l}</span></div>`).join("");
+  }
+  tick(); setInterval(tick, 1000);
+
+  // ---------- fireworks ----------
+  const fx = (() => {
+    const cvs = $("#fx"), ctx = cvs.getContext("2d");
+    const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+    let W, H, parts = [];
+    const resize = () => { W = cvs.width = innerWidth * devicePixelRatio; H = cvs.height = innerHeight * devicePixelRatio; cvs.style.width = innerWidth + "px"; cvs.style.height = innerHeight + "px"; };
+    addEventListener("resize", resize); resize();
+    const hues = [45, 330, 200, 140, 280, 20];
+    function burst(x, y, n = 60, scale = 1) {
+      if (reduce) return;
+      const hue = hues[Math.floor(Math.random() * hues.length)];
+      for (let i = 0; i < n; i++) {
+        const a = Math.random() * Math.PI * 2, sp = (Math.random() * 4 + 1.5) * scale;
+        parts.push({ x: x * devicePixelRatio, y: y * devicePixelRatio, vx: Math.cos(a) * sp, vy: Math.sin(a) * sp, life: 1, hue: hue + Math.random() * 30 - 15, size: Math.random() * 2 + 1.5 });
+      }
+    }
+    function loop() {
+      ctx.clearRect(0, 0, W, H);
+      parts = parts.filter((p) => p.life > 0);
+      for (const p of parts) {
+        p.x += p.vx * devicePixelRatio; p.y += p.vy * devicePixelRatio; p.vy += 0.06; p.vx *= 0.985; p.vy *= 0.985; p.life -= 0.012;
+        ctx.globalAlpha = Math.max(0, p.life);
+        ctx.fillStyle = `hsl(${p.hue} 95% 65%)`;
+        ctx.beginPath(); ctx.arc(p.x, p.y, p.size * devicePixelRatio, 0, Math.PI * 2); ctx.fill();
+      }
+      ctx.globalAlpha = 1;
+      requestAnimationFrame(loop);
+    }
+    loop();
+    if (!reduce) setInterval(() => { if (!document.hidden && parts.length < 400) burst(Math.random() * innerWidth, Math.random() * innerHeight * 0.35 + 30, 40, 0.7); }, 1800);
+    return { burst };
+  })();
+
+  function celebrate() {
+    for (let i = 0; i < 6; i++) setTimeout(() => fx.burst(Math.random() * innerWidth, Math.random() * innerHeight * 0.5 + 40, 90, 1.2), i * 220);
+  }
+
+  // ---------- login + quiz ----------
+  function startLogin() {
+    const embaralhar = (arr) => { const a = [...arr]; for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
+    login = { step: "welcome", nome: "", idade: null, qi: 0, answers: [], erro: "", pessoa: null, ordens: QUIZ.map((q) => embaralhar(q.opts)) };
+    renderLogin();
+    $("#login").classList.add("open");
+    document.body.style.overflow = "hidden";
+  }
+  function finishLogin(p) {
+    gravarSessao(p.id);
+    $("#login").classList.remove("open");
+    document.body.style.overflow = "";
+    renderAll(); renderMe();
+    setTimeout(celebrate, 150);
+  }
+  function renderMe() {
+    const p = state.pessoas.find((x) => x.id === sessao);
+    $("#meInfo").innerHTML = p ? `<span>Olá, <b>${esc(p.nome)}</b></span><button class="btn sm" data-login="trocar">Trocar pessoa</button>` : "";
+  }
+  function telaCarregando(erro) {
+    $("#loginCard").innerHTML = erro
+      ? `<div class="login-step">
+          <div class="login-kicker">Ops</div>
+          <h2>Não deu para abrir a festa.</h2>
+          <p>Confere a internet e tenta de novo. Se continuar, chama quem organizou.</p>
+          <button class="btn gold" style="width:100%;padding:14px" data-login="retry">Tentar de novo</button>
+        </div>`
+      : `<div class="login-step" style="text-align:center"><div class="big-year">2027</div><p>Abrindo a portaria da festa…</p></div>`;
+    $("#login").classList.add("open");
+    document.body.style.overflow = "hidden";
+  }
+
+  function perfilVencedor(answers) {
+    const count = {};
+    answers.forEach((k) => (count[k] = (count[k] || 0) + 1));
+    return Object.keys(PERFIS).reduce((best, k) => ((count[k] || 0) > (count[best] || 0) ? k : best), Object.keys(PERFIS)[0]);
+  }
+
+  function renderLogin() {
+    const L = login, total = QUIZ.length + 2;
+    const progress = (i, label) => `
+      <div class="login-progress"><span>${label}</span><span>${i} de ${total}</span></div>
+      <div class="bar"><i style="width:${(i / total) * 100}%"></i></div>`;
+    let html = "";
+
+    if (L.step === "welcome") {
+      html = `
+        <div class="login-kicker">Portaria da virada</div>
+        <div class="big-year">2027</div>
+        <h2>Antes de entrar na festa, a gente precisa te conhecer.</h2>
+        <p>São só umas perguntinhas. Nenhuma delas vale dinheiro, infelizmente. Mas todas valem a sua reputação na família.</p>
+        <button class="btn gold" style="width:100%;padding:14px" data-login="start">Bora começar</button>`;
+    }
+    if (L.step === "nome") {
+      html = `${progress(1, "Identificação")}
+        <h2>Como a família te chama?</h2>
+        <p>Pode ser o nome ou o apelido. Se for "o primo do churrasco", tudo bem também.</p>
+        <form data-login-form="nome" autocomplete="off">
+          <input class="big" name="nome" maxlength="40" placeholder="Seu nome" value="${esc(L.nome)}" required>
+          <div class="field-error">${esc(L.erro)}</div>
+          <div class="login-actions">
+            <button type="button" class="link-btn" data-login="back">Voltar</button>
+            <button class="btn gold" type="submit">Próximo</button>
+          </div>
+        </form>`;
+    }
+    if (L.step === "voltou") {
+      const p = L.pessoa;
+      html = `
+        <div class="login-kicker">Cadastro encontrado</div>
+        <h2>Olha quem voltou: ${esc(p.nome)}.</h2>
+        <p>${p.perfil && PERFIS[p.perfil] ? `Seu perfil continua firme e forte: <b style="color:var(--gold)">${PERFIS[p.perfil].titulo}</b>. ` : ""}Pode entrar, a farofa ainda não acabou.</p>
+        <div class="login-actions">
+          <button class="link-btn" data-login="nao-sou-eu">Não sou eu</button>
+          <button class="btn gold" data-login="entrar-existente">Entrar</button>
+        </div>`;
+    }
+    if (L.step === "idade") {
+      html = `${progress(2, "Identificação")}
+        <h2>Prazer, ${esc(L.nome)}. Quantos anos você tem?</h2>
+        <p>Pode falar a verdade. O que é dito na chácara fica na chácara.</p>
+        <form data-login-form="idade" autocomplete="off">
+          <input class="big" name="idade" type="number" inputmode="numeric" min="0" max="120" placeholder="Sua idade" value="${L.idade ?? ""}" required>
+          <div class="field-error">${esc(L.erro)}</div>
+          <div class="login-actions">
+            <button type="button" class="link-btn" data-login="back">Voltar</button>
+            <button class="btn gold" type="submit">Próximo</button>
+          </div>
+        </form>`;
+    }
+    if (L.step === "quiz") {
+      const q = QUIZ[L.qi];
+      html = `${progress(L.qi + 3, "Teste da virada")}
+        <h2>${q.q}</h2>
+        <div class="opts">
+          ${L.ordens[L.qi].map(([txt, k]) => `<button class="opt" data-login="answer" data-k="${k}" ${L.salvando ? "disabled" : ""}>${txt}</button>`).join("")}
+        </div>
+        <div class="field-error">${L.salvando ? `<span class="muted">Guardando seu cadastro…</span>` : esc(L.erro)}</div>
+        <div class="login-actions"><button class="link-btn" data-login="back" ${L.salvando ? "disabled" : ""}>Voltar</button><span></span></div>`;
+    }
+    if (L.step === "resultado") {
+      const p = L.pessoa, perf = PERFIS[p.perfil];
+      html = `
+        <div class="login-kicker">Cadastro concluído</div>
+        <h2>${esc(p.nome)}, o resultado saiu.</h2>
+        <p style="margin-bottom:4px">Você é oficialmente:</p>
+        <div class="result-title">${perf.titulo}</div>
+        <div class="msg-box">${perf.texto}</div>
+        <div class="msg-box">${fraseIdade(p.idade)}</div>
+        <div class="msg-box final">Feliz 2027, ${esc(p.nome)}. Que o ano venha leve, a carne venha no ponto e o Pix da chácara caia rápido.</div>
+        <button class="btn gold" style="width:100%;padding:14px;margin-top:8px" data-login="entrar-novo">Entrar na festa</button>`;
+    }
+    $("#loginCard").innerHTML = `<div class="login-step">${html}</div>`;
+    $("#loginCard input")?.focus();
+  }
+
+  function fraseIdade(i) {
+    if (i <= 12) return `Com ${i} anos, você é a pessoa com mais energia da chácara. Por favor, divida um pouco com os adultos depois do almoço.`;
+    if (i <= 17) return `Com ${i} anos, sua missão em 2027 é largar o celular pelo menos durante a contagem regressiva. Pelo menos os últimos dez segundos.`;
+    if (i <= 29) return `Com ${i} anos, 2027 é o ano em que você finalmente aprende a acender a churrasqueira sem usar meio litro de álcool.`;
+    if (i <= 49) return `Com ${i} anos, você já entendeu o segredo da virada: o melhor do dia 1º é acordar só na hora do almoço.`;
+    if (i <= 69) return `Com ${i} anos, você tem experiência suficiente para saber que quem segura a festa é a farofa, não o champanhe.`;
+    return `Com ${i} anos, você é patrimônio histórico da família. Tem direito ao melhor lugar da mesa e ao primeiro pedaço de tudo.`;
+  }
+
+  $("#loginCard").addEventListener("submit", (e) => {
+    e.preventDefault();
+    const f = e.target, kind = f.dataset.loginForm;
+    if (kind === "nome") {
+      const nome = f.nome.value.trim().replace(/\s+/g, " ");
+      if (nome.length < 2) { login.erro = "Precisa de pelo menos duas letras. Nem apelido de uma letra só vale."; return renderLogin(); }
+      login.nome = nome; login.erro = "";
+      const existente = state.pessoas.find((p) => norm(p.nome) === norm(nome));
+      if (existente) { login.pessoa = existente; login.step = "voltou"; }
+      else login.step = "idade";
+      renderLogin();
+    }
+    if (kind === "idade") {
+      const v = parseInt(f.idade.value, 10);
+      if (!Number.isFinite(v) || v < 0 || v > 120) { login.erro = "Essa idade não passou na portaria. Tenta um número entre 0 e 120."; return renderLogin(); }
+      login.idade = v; login.erro = ""; login.step = "quiz"; login.qi = 0; login.answers = [];
+      renderLogin();
+    }
+  });
+
+  document.addEventListener("click", async (e) => {
+    const el = e.target.closest("[data-login]");
+    if (!el) return;
+    const a = el.dataset.login, L = login;
+    if (a === "retry") return boot();
+    if (a === "trocar") return startLogin();
+    if (!L || L.salvando) return;
+    if (a === "start") { L.step = "nome"; }
+    if (a === "nao-sou-eu") { L.step = "nome"; L.nome = ""; L.pessoa = null; }
+    if (a === "entrar-existente" || a === "entrar-novo") return finishLogin(L.pessoa);
+    if (a === "answer") {
+      L.answers[L.qi] = el.dataset.k;
+      if (L.qi < QUIZ.length - 1) L.qi++;
+      else {
+        const p = {
+          id: novoId(), nome: L.nome, idade: L.idade, tipo: L.idade <= 12 ? "crianca" : "adulto",
+          perfil: perfilVencedor(L.answers), pagouComida: false, pagouChacara: false, foto: null,
+        };
+        L.salvando = true; L.erro = ""; renderLogin();
+        criando.add(p.id);
+        const { error } = await sb.from("pessoas").insert({ id: p.id, nome: p.nome, idade: p.idade, tipo: p.tipo, perfil: p.perfil });
+        L.salvando = false;
+        if (error) {
+          console.error(error);
+          if (error.code === "23505") { // alguém cadastrou esse nome agora há pouco
+            try { await carregar(); } catch (_) {}
+            const ex = state.pessoas.find((x) => norm(x.nome) === norm(L.nome));
+            if (ex) { L.pessoa = ex; L.step = "voltou"; return renderLogin(); }
+          }
+          L.erro = "Não deu para guardar seu cadastro. Confere a internet e toca de novo na resposta.";
+          return renderLogin();
+        }
+        if (!state.pessoas.some((x) => x.id === p.id)) state.pessoas.push(p);
+        L.pessoa = p; L.step = "resultado";
+        renderLogin(); renderAll(); celebrate();
+        return;
+      }
+    }
+    if (a === "back") {
+      if (L.step === "nome") L.step = "welcome";
+      else if (L.step === "idade") L.step = "nome";
+      else if (L.step === "quiz") { if (L.qi > 0) L.qi--; else L.step = "idade"; }
+      L.erro = "";
+    }
+    renderLogin();
+  });
+
+  let login;
+
+  // ---------- início ----------
+  async function boot() {
+    telaCarregando(false);
+    try { await carregar(); }
+    catch (e) { console.error(e); return telaCarregando(true); }
+    pronto = true;
+    renderAll();
+    conectarAoVivo();
+    if (state.pessoas.some((p) => p.id === sessao)) {
+      $("#login").classList.remove("open");
+      document.body.style.overflow = "";
+      renderMe();
+      setTimeout(() => fx.burst(innerWidth / 2, 160, 100, 1.2), 400);
+    } else {
+      gravarSessao(null);
+      startLogin();
+    }
+  }
+  // celular volta do bloqueio: confere se perdeu alguma coisa
+  document.addEventListener("visibilitychange", () => { if (!document.hidden && pronto) sincronizar(); });
+
+  boot();
+})();
+</script>
+</body>
+</html>
