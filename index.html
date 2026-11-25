@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Réveillon 2027</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎆</text></svg>">
 <meta name="theme-color" content="#0b1026">
@@ -247,17 +247,53 @@
   .opt:disabled { opacity: .5; cursor: wait; transform: none; }
   .perfil-line { font-size: 12px; color: var(--gold); margin-top: 3px; }
 
-  #toast { position: fixed; left: 50%; bottom: 24px; transform: translateX(-50%) translateY(120px); background: #1d2350; border: 1px solid var(--gold); color: var(--text); padding: 12px 18px; border-radius: 14px; z-index: 60; transition: .35s cubic-bezier(.2,.9,.3,1.2); font-weight: 600; box-shadow: 0 10px 30px #0008; max-width: calc(100% - 32px); }
-  #toast.show { transform: translateX(-50%) translateY(0); }
+  #toast { position: fixed; left: 50%; bottom: calc(24px + env(safe-area-inset-bottom)); transform: translateX(-50%) translateY(20px); opacity: 0; visibility: hidden; background: #1d2350; border: 1px solid var(--gold); color: var(--text); padding: 12px 18px; border-radius: 14px; z-index: 60; transition: .35s cubic-bezier(.2,.9,.3,1.2); font-weight: 600; box-shadow: 0 10px 30px #0008; max-width: calc(100% - 32px); text-align: center; pointer-events: none; }
+  #toast.show { transform: translateX(-50%) translateY(0); opacity: 1; visibility: visible; }
+
+  /* Janela do prato: nada pode empurrar a largura */
+  .modal-stats { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+  .modal-nav .btn { flex: 1; min-width: 0; white-space: normal; line-height: 1.25; min-height: 44px; }
+  .modal .close { width: 44px; height: 44px; }
 
   @media (max-width: 640px) {
+    /* tudo que se toca com 44px+ e sem zoom automático do iPhone (fonte >= 16px) */
+    input, select { font-size: 16px; }
     .add-person { grid-template-columns: 1fr 1fr; }
     .add-person input[name=nome] { grid-column: 1 / -1; }
+    .add-person > * { min-height: 46px; }
+    .chacara-box input { width: 100% !important; min-height: 46px; }
     .brand h1 { font-size: 22px; }
-    nav.tabs { width: 100%; justify-content: space-between; }
-    nav.tabs button { flex: 1; padding: 9px 8px; }
-    .countdown div { min-width: 64px; }
+    header { margin-bottom: 18px; }
+    .me { width: 100%; justify-content: space-between; }
+    .btn.sm { min-height: 40px; padding: 8px 12px; font-size: 13px; }
+    .btn { min-height: 44px; }
+    .toggle { min-height: 40px; padding: 8px 14px; font-size: 13px; }
+    .person .foot select { min-height: 40px; font-size: 16px !important; padding: 6px 10px !important; }
+    .person .foot .btn.danger { min-width: 44px; }
+    .link-btn { min-height: 44px; padding: 10px 4px; }
+    .meal-row input { font-size: 16px; min-height: 40px; }
+
+    /* abas embaixo, onde o dedão alcança */
+    nav.tabs { position: fixed; left: 12px; right: 12px; bottom: calc(10px + env(safe-area-inset-bottom)); z-index: 30;
+      justify-content: space-between; background: #141a3aeb; backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+      box-shadow: 0 10px 40px #000a; }
+    nav.tabs button { flex: 1; padding: 12px 6px; min-height: 48px; font-size: 14px; }
+    .wrap { padding-bottom: calc(110px + env(safe-area-inset-bottom)); }
+    #toast { bottom: calc(86px + env(safe-area-inset-bottom)); }
+
+    /* contagem sempre numa linha só */
+    .countdown { gap: 8px; flex-wrap: nowrap; }
+    .countdown div { flex: 1; min-width: 0; padding: 10px 4px; }
     .countdown b { font-size: 26px; }
+    .hero { padding: 22px 14px; }
+    .modal-bg { padding: 10px; align-items: flex-end; }
+    .modal { max-height: calc(100dvh - 20px); }
+    .modal .photo { height: 190px; }
+  }
+  @media (max-width: 360px) {
+    .countdown b { font-size: 22px; }
+    .countdown span { font-size: 10px; letter-spacing: .5px; }
+    nav.tabs button { font-size: 13px; padding: 12px 2px; }
   }
   @media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } }
 </style>
@@ -313,8 +349,8 @@
     <form class="card add-person" id="addForm" autocomplete="off">
       <input name="nome" placeholder="Nome da pessoa" required maxlength="40">
       <select name="tipo">
-        <option value="adulto">Adulto (cota inteira)</option>
-        <option value="crianca">Criança (meia cota)</option>
+        <option value="adulto">Adulto</option>
+        <option value="crianca">Criança (½ cota)</option>
         <option value="isento">Isento</option>
       </select>
       <button class="btn gold" type="submit">➕ Adicionar</button>
